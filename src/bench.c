@@ -145,6 +145,13 @@ static int bench_main()
 	if (probe == -ENOSYS)
 		has_faccessat2 = false;
 
+	// test execveat
+	bool has_execveat = true;
+	probe = __syscall(SYS_execveat, AT_FDCWD, (long)"/dev/null", NULL, NULL, NULL, NULL);
+	if (probe == -ENOSYS)
+		has_execveat = false;
+
+
 	print_out(extra_lines, sizeof(extra_lines) - 1 );
 
 	const void *nothing = nullptr;
@@ -181,6 +188,10 @@ start_loop:
 	box_template[1] = 49 + j; // off by one, array starts with 0, humans count with 1
 
 	run_bench(SYS_execve, (long)tests[j], NULL, NULL, NONE, NONE, NONE, "execve:      ");
+
+	if (has_execveat)
+		run_bench(SYS_execveat, AT_FDCWD, (long)tests[j], NULL, NULL, 0, NONE, "execveat:    ");
+
 	run_bench(SYS_newfstatat, AT_FDCWD, (long)tests[j], (long)&st, AT_SYMLINK_NOFOLLOW, NONE, NONE, "newfstatat:  ");
 	run_bench(SYS_faccessat, AT_FDCWD, (long)tests[j], F_OK, NONE, NONE, NONE, "faccessat:   ");
 
