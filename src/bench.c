@@ -189,7 +189,8 @@ start_loop:
 	if (has_faccessat2)
 		run_bench(SYS_faccessat2, AT_FDCWD, (long)tests[j], F_OK, 0, NONE, NONE, "faccessat2:  ");
 #else
-	run_bench(SYS_access, (long)tests[j], F_OK, NONE, NONE, NONE, NONE, "access:      ");
+	if (!is_seccomp_enabled)
+		run_bench(SYS_access, (long)tests[j], F_OK, NONE, NONE, NONE, NONE, "access:      ");
 #endif
 
 
