@@ -28,6 +28,7 @@ jobs:
           tar xf sstrip.tar.gz
           make -C ELFkickers-3.2 sstrip
           cp ELFkickers-3.2/sstrip/sstrip .
+          export ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true
 
       - name: compile via zigcc
         run: |
